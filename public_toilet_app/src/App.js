@@ -10,7 +10,6 @@ function App() {
   return (
     <>
       <MainSection />
-
     </>
   );
 }
@@ -57,6 +56,9 @@ function MainSection() {
     gender: ''
   });
 
+  const [formList, setFormList] = useState([]);
+
+
 
   const handleChange = (e) => {
     setFormData({
@@ -65,19 +67,38 @@ function MainSection() {
     });
   };
 
-
   const handleSubmit = (event) => {
     console.log('inside handleSubmit method');
     event.preventDefault();
+
+    setFormList([...formList, formData]);
+
+    setFormData({
+      email: '',
+      restroomName: '',
+      address: '',
+      landmark: '',
+      gender: ''
+    });
+
+    handleClose();
 
     // const form = event.currentTarget;
     // if (form.checkValidity() === false) {
     //   event.preventDefault();
     //   event.stopPropagation();
     // }
-    console.log(formData); // Log the selected gender value
+    console.log(formList); // Log the selected gender value
 
   };
+
+  const handleDelete = (index) => {
+    const newCopyList = [...formList];
+    console.log('Delete clicked ' + index);
+    newCopyList.splice(index, 1);
+    console.log('newCopyList' + newCopyList);
+    setFormList(newCopyList);
+  }
 
   return (
     <>
@@ -180,31 +201,40 @@ function MainSection() {
       </main>
 
       <Table striped bordered hover size="sm">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Username</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{formData.email}</td>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-      </tbody>
-    </Table>
+        <thead>
+          <tr>
+            <th>index </th>
+            <th>email</th>
+            <th>Restroom Name</th>
+            <th>Address</th>
+            <th>Landmark</th>
+            <th>Gender</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {formList.map((item, index) =>
+            <tr>
+              <td>{index}</td>
+              <td>{item.email}</td>
+              <td>{item.restroomName}</td>
+              <td>{item.address}</td>
+              <td>{item.landmark}</td>
+              <td>{item.gender}</td>
+              <td>
+                <Button onClick={() => handleDelete(index)} >Delete</Button>
+                <Button  >Edit</Button>
 
-
-
+                </td>
+                
+            </tr>
+          )}
+        </tbody>
+      </Table>
     </>
 
   );
 }
-
 
 
 function MyButton() {
